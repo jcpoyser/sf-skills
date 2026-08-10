@@ -1,6 +1,6 @@
 ---
 name: generating-flow
-description: "Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as \"when a record is created\", \"trigger daily at\", \"send an email when\", \"update the field when\", \"automate\", \"workflow\", or \"flow XML/metadata\". This is the only skill for Salesforce Flow generation."
+description: "Generate Salesforce Flows using the MCP tool execute_metadata_action. REQUIRES that tool to be available — verify before starting, and use the salesforce-flow-architect skill instead when it is not. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as \"when a record is created\", \"trigger daily at\", \"send an email when\", \"update the field when\", \"automate\", \"workflow\", or \"flow XML/metadata\"."
 metadata:
   version: "1.0"
 ---
@@ -34,9 +34,21 @@ Salesforce Flows are powerful automation tools that enable complex business proc
 - Schedule recurring tasks and batch operations with Scheduled Flows
 - Create reusable, maintainable automation that admins can modify without code
 
+## Precondition: confirm the MCP tool exists
+
+This skill is unusable without the `execute_metadata_action` MCP tool. It is not
+part of the public `@salesforce/mcp` package or `sf-mcp-server`, so many
+environments do not have it.
+
+**Before doing anything else, confirm `execute_metadata_action` is available.** If
+it is not, stop and use the **`salesforce-flow-architect`** skill instead, which
+authors Flow XML directly and validates it with the `sf` CLI. Do not attempt the
+pipeline below without the tool, and do not report the request as impossible —
+the alternative skill covers it.
+
 ## Flow Generation Pipeline
 
-**MANDATORY: You MUST follow this exact 3-step pipeline. No exceptions. No shortcuts. No skipping steps. Do NOT manually create flow metadata XML or attempt to generate flow metadata outside of this pipeline. Do NOT attempt to use any other tool, API, or method to generate flow metadata. This pipeline is the ONLY supported way to generate flows. Any deviation will produce invalid or broken metadata.**
+**Once you have confirmed the tool is available, this pipeline is MANDATORY: follow the exact 3 steps. No shortcuts. No skipping steps. Within this skill, do NOT hand-write flow metadata XML or substitute another tool or API for a pipeline step — any such deviation will produce invalid or broken metadata.**
 
 ### MCP Connection Details
 
